@@ -16,19 +16,18 @@ namespace EmployeesList
         public MainWindow()
         {
             InitializeComponent();
-            CreateEmployeesWindows(Deserialization());
         }
 
         public string Filename;
 
-        public static List<Employee> Deserialization(string jsonFile = @".\EmployeesDataFile.json")
+        public static List<Employee> Deserialization(string jsonFile)
         {
             var jsonString = File.ReadAllText(jsonFile);
             var deserializedEmployees = JsonConvert.DeserializeObject<List<Employee>>(jsonString);
             return deserializedEmployees;
         }
 
-        public static void Serialization(List<Employee> employees, string jsonFile = @".\EmployeesDataFile.json")
+        public static void Serialization(List<Employee> employees, string jsonFile)
         {
             File.WriteAllText(jsonFile, JsonConvert.SerializeObject(employees));
         }
@@ -70,7 +69,7 @@ namespace EmployeesList
             WorkList.Items.Clear();
 
             employees.Add(employee);
-            Serialization(employees);
+            Serialization(employees, Filename);
             CreateEmployeesWindows(employees);
 
             SurnameData.Text = "";
@@ -84,7 +83,7 @@ namespace EmployeesList
             var employees = Deserialization(Filename);
             var index = WorkList.SelectedIndex;
             employees.Remove(employees[index]);
-            Serialization(employees);
+            Serialization(employees, Filename);
             WorkList.Items.Clear();
             CreateEmployeesWindows(employees);
         }
